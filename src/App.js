@@ -1,36 +1,39 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button, Row, Col, Container } from 'react-bootstrap';
 
 function App() {
 
   const homesData = [
     {
       "title": "Home 1",
-      "image": "assets/listing.jpg",
+      "image": "listing.jpg",
       "location": "new york",
       "price": "125"
     },
     {
       "title": "Home 2",
-      "image": "assets/listing.jpg",
+      "image": "listing.jpg",
       "location": "boston",
       "price": "225"
     },
     {
       "title": "Home 3",
-      "image": "assets/listing.jpg",
+      "image": "listing.jpg",
       "location": "chicago",
       "price": "325"
     }
   ];
 
-  const homes = homesData.map((home, i) => <Home name={home} key={i}/>);
+  const homes = homesData.map((home, i) => <Col><Home home={home} key={i}/></Col>);
 
   return (
     <div className="App">
-      { homes }
+      <Container className="mt-4">
+        <Row>
+          { homes }
+        </Row>
+      </Container>
     </div>
   );
 }
@@ -38,14 +41,14 @@ function App() {
 function Home(props) {
   return (
     <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src="holder.js/100px180" />
+      <Card.Img variant="top" src={ props.home.image } />
       <Card.Body>
-        <Card.Title>Card Title</Card.Title>
+        <Card.Title>{ props.home.title }</Card.Title>
         <Card.Text>
-          Some quick example text to build on the card title and make up the bulk of
-          the card's content.
+          <div>{ props.home.location }</div>
+          <div>{ props.home.price }</div>
         </Card.Text>
-        <Button variant="primary">Go somewhere</Button>
+        <Button variant="primary">Book</Button>
       </Card.Body>
     </Card>
   );
