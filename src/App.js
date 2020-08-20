@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Card, Button, Row, Col, Container } from 'react-bootstrap';
+import { Card, Button, Row, Col, Container, Navbar, Nav, NavDropdown, FormControl, Form } from 'react-bootstrap';
 
 function App() {
 
@@ -29,6 +29,18 @@ function App() {
 
   return (
     <div className="App">
+      <Navbar className="py-3 border-bottom">
+        <Navbar.Brand href="#"><img src="logo192.png" width="40" alt="" /></Navbar.Brand>
+        <Form inline className="mr-auto w-50">
+          <FormControl type="text" placeholder="Search homes" className="w-50" />
+        </Form>
+        <Nav className="ml-auto text-uppercase">
+          <Nav.Link href="#home">Become a host</Nav.Link>
+          <Nav.Link href="#link">Help</Nav.Link>
+          <Nav.Link href="#link">Sign up</Nav.Link>
+          <Nav.Link href="#link">Login</Nav.Link>
+        </Nav>
+      </Navbar>
       <Container className="mt-4">
         <Row>
           { homes }
