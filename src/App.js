@@ -1,6 +1,9 @@
 import React from 'react';
 import './App.css';
 import { Card, Button, Row, Col, Container, Navbar, Nav, NavDropdown, FormControl, Form } from 'react-bootstrap';
+import Dialog from '@material-ui/core/Dialog';
+import { DialogTitle, List, ListItem } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
 function App() {
 
@@ -25,7 +28,19 @@ function App() {
     }
   ];
 
-  const homes = homesData.map((home, i) => <Col><Home home={home} key={i}/></Col>);
+  const [open, setOpen] = React.useState(false);
+  // const [selectedValue, setSelectedValue] = React.useState(emails[1]);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+    // setSelectedValue(value);
+  };
+
+  const homes = homesData.map((home, i) => <Col><Home home={home} onClick={handleClickOpen} key={i}/></Col>);
 
   return (
     <div className="App">
@@ -55,6 +70,7 @@ function App() {
           { homes }
         </Row>
       </Container>
+      <SimpleDialog open={open} onClose={handleClose} />
     </div>
   );
 }
@@ -75,5 +91,30 @@ function Home(props) {
     </Card>
   );
 }
+
+function SimpleDialog(props) {
+  const { onClose, selectedValue, open } = props;
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+  const handleListItemClick = (value) => {
+    onClose(value);
+  };
+
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
+      Hello
+    </Dialog>
+  );
+}
+
+SimpleDialog.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  selectedValue: PropTypes.string.isRequired,
+};
 
 export default App;
