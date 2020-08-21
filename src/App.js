@@ -41,7 +41,16 @@ function App() {
           <Nav.Link href="#link">Login</Nav.Link>
         </Nav>
       </Navbar>
-      <Container className="mt-4">
+      <Container className="m-0 px-4 py-2 container-fluid mw-100 border-bottom">
+        <Button variant="outline-secondary" className="text-nowrap mr-4 py-1">Home type</Button>
+        <Button variant="outline-secondary" className="text-nowrap mr-4 py-1">Dates</Button>
+        <Button variant="outline-secondary" className="text-nowrap mr-4 py-1">Guests</Button>
+        <Button variant="outline-secondary" className="text-nowrap mr-4 py-1">Price</Button>
+        <Button variant="outline-secondary" className="text-nowrap mr-4 py-1">Rooms and beds</Button>
+        <Button variant="outline-secondary" className="text-nowrap mr-4 py-1">Amenities</Button>
+      </Container>
+      <Container className="m-2">
+        <h1>Homes</h1>
         <Row>
           { homes }
         </Row>
