@@ -67,9 +67,10 @@ function Home(props) {
         <Card.Title>{ props.home.title }</Card.Title>
         <Card.Text>
           <div>{ props.home.location }</div>
-          <div>{ props.home.price }</div>
         </Card.Text>
-        <Button variant="primary">Book</Button>
+        <div className="d-flex justify-content-end">
+          <Button variant="primary">Book</Button>
+        </div>
       </Card.Body>
     </Card>
   );
