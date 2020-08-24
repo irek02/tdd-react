@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
-import { Card, Button, Row, Col, Container, Navbar, Nav, NavDropdown, FormControl, Form } from 'react-bootstrap';
+import { Card, Button, Row, Col, Container, Navbar, Nav, FormControl, Form } from 'react-bootstrap';
 import Dialog from '@material-ui/core/Dialog';
-import { DialogTitle, List, ListItem } from '@material-ui/core';
+import { DialogTitle, List, ListItem, DialogContent } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 function App() {
@@ -28,19 +28,20 @@ function App() {
     }
   ];
 
-  const [open, setOpen] = React.useState(false);
+  const [dialogState, setDialogState] = React.useState({ open: false, home: null });
   // const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpen = (home) => {
+    console.log('click!', home)
+    setDialogState({ open: true, home });
   };
 
-  const handleClose = (value) => {
-    setOpen(false);
+  const handleClose = () => {
+    setDialogState({ open: false, home: null });
     // setSelectedValue(value);
   };
 
-  const homes = homesData.map((home, i) => <Col><Home home={home} onClick={handleClickOpen} key={i}/></Col>);
+  const homes = homesData.map((home, i) => <Col key={i}><Home home={home} handleClickOpen={handleClickOpen}/></Col>);
 
   return (
     <div className="App">
@@ -70,7 +71,7 @@ function App() {
           { homes }
         </Row>
       </Container>
-      <SimpleDialog open={open} onClose={handleClose} />
+      <SimpleDialog dialogState={dialogState} onClose={handleClose} />
     </div>
   );
 }
@@ -82,10 +83,10 @@ function Home(props) {
       <Card.Body>
         <Card.Title>{ props.home.title }</Card.Title>
         <Card.Text>
-          <div>{ props.home.location }</div>
+          { props.home.location }
         </Card.Text>
         <div className="d-flex justify-content-end">
-          <Button variant="primary">Book</Button>
+          <Button variant="primary" onClick={() => props.handleClickOpen(props.home)}>Book</Button>
         </div>
       </Card.Body>
     </Card>
@@ -93,28 +94,34 @@ function Home(props) {
 }
 
 function SimpleDialog(props) {
-  const { onClose, selectedValue, open } = props;
+  const { onClose, selectedValue, dialogState } = props;
 
   const handleClose = () => {
     onClose(selectedValue);
   };
 
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
+  if (!dialogState.open) {
+    return null;
+  }
+
+  // const handleListItemClick = (value) => {
+  //   onClose(value);
+  // };
 
   return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
-      Hello
+    <Dialog onClose={handleClose} open={dialogState.open}>
+      <DialogTitle id="simple-dialog-title">Book {dialogState.home.title}</DialogTitle>
+      <DialogContent>
+        ${dialogState.home.price} per night
+      </DialogContent>
     </Dialog>
   );
 }
 
 SimpleDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
+  // onClose: PropTypes.func.isRequired,
+  // dialogState: PropTypes.bool.isRequired,
+  // selectedValue: PropTypes.string.isRequired,
 };
 
 export default App;
