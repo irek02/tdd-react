@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import moment from 'moment';
 import './App.css';
 import { Card, Button, Row, Col, Container, Navbar, Nav, FormControl, Form } from 'react-bootstrap';
 import Dialog from '@material-ui/core/Dialog';
-import { DialogTitle, List, ListItem, DialogContent } from '@material-ui/core';
-import PropTypes from 'prop-types';
+import { DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 
 function App() {
 
@@ -28,17 +28,14 @@ function App() {
     }
   ];
 
-  const [dialogState, setDialogState] = React.useState({ open: false, home: null });
-  // const [selectedValue, setSelectedValue] = React.useState(emails[1]);
+  const [dialogState, setDialogState] = useState({ open: false, home: null });
 
   const handleClickOpen = (home) => {
-    console.log('click!', home)
     setDialogState({ open: true, home });
   };
 
   const handleClose = () => {
     setDialogState({ open: false, home: null });
-    // setSelectedValue(value);
   };
 
   const homes = homesData.map((home, i) => <Col key={i}><Home home={home} handleClickOpen={handleClickOpen}/></Col>);
@@ -96,8 +93,37 @@ function Home(props) {
 function SimpleDialog(props) {
   const { onClose, selectedValue, dialogState } = props;
 
-  const handleClose = () => {
-    onClose(selectedValue);
+  const [formState, setFormState] = useState({ fromDate: '', untilDate: '' });
+  const [totalCost, setTotalCost] = useState('--');
+
+  const handleClose = () => onClose(selectedValue);
+  const handleFromDateChange = event => {
+    const fromDate = event.target.value;
+    setFormState({ ...formState, fromDate });
+    setTotalCost(calculateTotal(fromDate, formState.untilDate));
+  }
+  const handleUntilDateChange = event => {
+    const untilDate = event.target.value;
+    setFormState({ ...formState, untilDate });
+    setTotalCost(calculateTotal(formState.fromDate, untilDate));
+  }
+
+  const calculateTotal = (fromDate, untilDate) => {
+    const checkInDate = moment(fromDate, 'YYYY-MM-DD');
+    const checkOutDate = moment(untilDate, 'YYYY-MM-DD');
+    const nights = checkOutDate.diff(checkInDate, 'days');
+
+    const total = nights * dialogState.home.price;
+
+    if (total > 0 && total < 900000) {
+      return '$' + total;
+    } else {
+      return '--';
+    }
+  }
+
+  const handleBook = () => {
+    console.log('book!');
   };
 
   if (!dialogState.open) {
@@ -112,16 +138,24 @@ function SimpleDialog(props) {
     <Dialog onClose={handleClose} open={dialogState.open}>
       <DialogTitle id="simple-dialog-title">Book {dialogState.home.title}</DialogTitle>
       <DialogContent>
-        ${dialogState.home.price} per night
+        <div>
+          ${dialogState.home.price} per night
+        </div>
+        <div>
+          <input type="date" value={formState.fromDate} onChange={handleFromDateChange} />
+        </div>
+        <div>
+          <input type="date" value={formState.untilDate} onChange={handleUntilDateChange} />
+        </div>
+        <div>
+          Total: {totalCost}
+        </div>
       </DialogContent>
+      <DialogActions>
+        <Button variant="primary" onClick={handleBook}>Book</Button>
+      </DialogActions>
     </Dialog>
   );
 }
-
-SimpleDialog.propTypes = {
-  // onClose: PropTypes.func.isRequired,
-  // dialogState: PropTypes.bool.isRequired,
-  // selectedValue: PropTypes.string.isRequired,
-};
 
 export default App;
