@@ -96,7 +96,7 @@ function SimpleDialog(props) {
   const [formState, setFormState] = useState({ fromDate: '', untilDate: '' });
   const [totalCost, setTotalCost] = useState('--');
 
-  const handleClose = () => onClose(selectedValue);
+  const handleClose = () => onClose();
   const handleFromDateChange = event => {
     const fromDate = event.target.value;
     setFormState({ ...formState, fromDate });
@@ -122,8 +122,11 @@ function SimpleDialog(props) {
     }
   }
 
-  const handleBook = () => {
-    console.log('book!');
+  const handleBook = async () => {
+    const response = await fetch('https://run.mocky.io/v3/4a53ec91-a1e2-4a38-8a3f-188d7173fc5f');
+    const message = await response.json();
+    handleClose();
+    console.log(message);
   };
 
   if (!dialogState.open) {
