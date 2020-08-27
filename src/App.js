@@ -3,7 +3,7 @@ import moment from 'moment';
 import './App.css';
 import { Card, Button, Row, Col, Container, Navbar, Nav, FormControl, Form } from 'react-bootstrap';
 import Dialog from '@material-ui/core/Dialog';
-import { DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
+import { DialogTitle, DialogContent, DialogActions, Snackbar } from '@material-ui/core';
 
 function App() {
 
@@ -29,13 +29,19 @@ function App() {
   ];
 
   const [dialogState, setDialogState] = useState({ open: false, home: null });
+  const [snackBarState, setSnackBarState] = useState({ open: false, message: null });
 
   const handleClickOpen = (home) => {
     setDialogState({ open: true, home });
   };
 
-  const handleClose = () => {
+  const handleClose = (message) => {
     setDialogState({ open: false, home: null });
+    setSnackBarState({ open: true, message });
+  };
+
+  const handleSnackBarClose = () => {
+    setSnackBarState({ open: false, message: null });
   };
 
   const homes = homesData.map((home, i) => <Col key={i}><Home home={home} handleClickOpen={handleClickOpen}/></Col>);
@@ -69,6 +75,12 @@ function App() {
         </Row>
       </Container>
       <SimpleDialog dialogState={dialogState} onClose={handleClose} />
+      <Snackbar
+        open={snackBarState.open}
+        onClose={handleSnackBarClose}
+        autoHideDuration={3000}
+        message={snackBarState.message}
+      />
     </div>
   );
 }
@@ -91,12 +103,12 @@ function Home(props) {
 }
 
 function SimpleDialog(props) {
-  const { onClose, selectedValue, dialogState } = props;
+  const { onClose, dialogState } = props;
 
   const [formState, setFormState] = useState({ fromDate: '', untilDate: '' });
   const [totalCost, setTotalCost] = useState('--');
 
-  const handleClose = () => onClose();
+  const handleClose = (message) => onClose(message);
   const handleFromDateChange = event => {
     const fromDate = event.target.value;
     setFormState({ ...formState, fromDate });
@@ -122,27 +134,27 @@ function SimpleDialog(props) {
     }
   }
 
-  const handleBook = async () => {
+  const handleBooking = async () => {
     const response = await fetch('https://run.mocky.io/v3/4a53ec91-a1e2-4a38-8a3f-188d7173fc5f');
-    const message = await response.json();
-    handleClose();
-    console.log(message);
+    const responseJson = await response.json();
+    handleClose(responseJson.response);
   };
 
   if (!dialogState.open) {
     return null;
   }
 
-  // const handleListItemClick = (value) => {
-  //   onClose(value);
-  // };
-
   return (
-    <Dialog onClose={handleClose} open={dialogState.open}>
+    <Dialog
+      maxWidth='xs'
+      fullWidth='true'
+      onClose={handleClose}
+      open={dialogState.open}
+    >
       <DialogTitle id="simple-dialog-title">Book {dialogState.home.title}</DialogTitle>
       <DialogContent>
         <div>
-          ${dialogState.home.price} per night
+          <span class="text-primary">${dialogState.home.price}</span> per night
         </div>
         <div>
           <input type="date" value={formState.fromDate} onChange={handleFromDateChange} />
@@ -155,7 +167,7 @@ function SimpleDialog(props) {
         </div>
       </DialogContent>
       <DialogActions>
-        <Button variant="primary" onClick={handleBook}>Book</Button>
+        <Button variant="primary" onClick={handleBooking}>Book</Button>
       </DialogActions>
     </Dialog>
   );
