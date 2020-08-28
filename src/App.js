@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import './App.css';
 import { Card, Button, Row, Col, Container, Navbar, Nav, FormControl, Form } from 'react-bootstrap';
@@ -7,27 +7,7 @@ import { DialogTitle, DialogContent, DialogActions, Snackbar } from '@material-u
 
 function App() {
 
-  const homesData = [
-    {
-      "title": "Home 1",
-      "image": "listing.jpg",
-      "location": "new york",
-      "price": "125"
-    },
-    {
-      "title": "Home 2",
-      "image": "listing.jpg",
-      "location": "boston",
-      "price": "225"
-    },
-    {
-      "title": "Home 3",
-      "image": "listing.jpg",
-      "location": "chicago",
-      "price": "325"
-    }
-  ];
-
+  const [homesState, setHomesState] = useState([]);
   const [dialogState, setDialogState] = useState({ open: false, home: null });
   const [snackBarState, setSnackBarState] = useState({ open: false, message: null });
 
@@ -37,14 +17,27 @@ function App() {
 
   const handleClose = (message) => {
     setDialogState({ open: false, home: null });
-    setSnackBarState({ open: true, message });
+    if (message) {
+      setSnackBarState({ open: true, message });
+    }
   };
 
   const handleSnackBarClose = () => {
     setSnackBarState({ open: false, message: null });
   };
 
-  const homes = homesData.map((home, i) => <Col key={i}><Home home={home} handleClickOpen={handleClickOpen}/></Col>);
+  useEffect(() => {
+
+    if (homesState.length > 0) return;
+
+    fetch('https://run.mocky.io/v3/6474432c-4bae-4807-bfbe-427b252f0b76')
+      .then(response => response.json())
+      .then(responseJson => {
+        const homes = responseJson.map((home, i) => <Col key={i}><Home home={home} handleClickOpen={handleClickOpen} /></Col>);
+        setHomesState(homes);
+      });
+
+  });
 
   return (
     <div className="App">
@@ -71,7 +64,7 @@ function App() {
       <Container className="m-2">
         <h1>Homes</h1>
         <Row>
-          { homes }
+          { homesState }
         </Row>
       </Container>
       <SimpleDialog dialogState={dialogState} onClose={handleClose} />
@@ -103,17 +96,20 @@ function Home(props) {
 }
 
 function SimpleDialog(props) {
+
   const { onClose, dialogState } = props;
 
   const [formState, setFormState] = useState({ fromDate: '', untilDate: '' });
   const [totalCost, setTotalCost] = useState('--');
 
   const handleClose = (message) => onClose(message);
+
   const handleFromDateChange = event => {
     const fromDate = event.target.value;
     setFormState({ ...formState, fromDate });
     setTotalCost(calculateTotal(fromDate, formState.untilDate));
   }
+
   const handleUntilDateChange = event => {
     const untilDate = event.target.value;
     setFormState({ ...formState, untilDate });
@@ -147,23 +143,35 @@ function SimpleDialog(props) {
   return (
     <Dialog
       maxWidth='xs'
-      fullWidth='true'
+      fullWidth={true}
       onClose={handleClose}
       open={dialogState.open}
     >
       <DialogTitle id="simple-dialog-title">Book {dialogState.home.title}</DialogTitle>
       <DialogContent>
-        <div>
-          <span class="text-primary">${dialogState.home.price}</span> per night
+        <div className="mb-3">
+          <span className="font-weight-bold text-primary text-large">${dialogState.home.price}</span> per night
         </div>
-        <div>
-          <input type="date" value={formState.fromDate} onChange={handleFromDateChange} />
+        <div className="form-group">
+          <label htmlFor="checkInDate">Choose your check-in date</label>
+          <input
+            id="checkInDate"
+            type="date"
+            className="form-control"
+            value={formState.fromDate}
+            onChange={handleFromDateChange} />
         </div>
-        <div>
-          <input type="date" value={formState.untilDate} onChange={handleUntilDateChange} />
+        <div className="form-group">
+          <label htmlFor="checkOutDate">Choose your check-out date</label>
+          <input
+            id="checkOutDate"
+            type="date"
+            className="form-control"
+            value={formState.untilDate}
+            onChange={handleUntilDateChange} />
         </div>
-        <div>
-          Total: {totalCost}
+        <div className="my-3 text-right">
+          <span className="font-weight-bold text-large">Total: {totalCost}</span>
         </div>
       </DialogContent>
       <DialogActions>
@@ -171,6 +179,7 @@ function SimpleDialog(props) {
       </DialogActions>
     </Dialog>
   );
+
 }
 
 export default App;
