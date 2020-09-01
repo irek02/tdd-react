@@ -29,12 +29,6 @@ beforeEach(() => {
 
 });
 
-it("renders with or without a name", () => {
-
-  expect(true).toBe(true);
-
-});
-
 it('should show logo', () => {
 
   expect(container.querySelector('[data-testid="logo"]')).toBeTruthy();
