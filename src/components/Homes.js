@@ -31,7 +31,8 @@ export default function Homes() {
     fetch('https://run.mocky.io/v3/6474432c-4bae-4807-bfbe-427b252f0b76')
       .then(response => response.json())
       .then(responseJson => {
-        const homes = responseJson.map((home, i) => <Col key={i}><Home home={home} handleClickOpen={handleClickOpen} /></Col>);
+        const homes = responseJson.map((home, i) =>
+          <Col key={i}><Home home={home} handleClickOpen={handleClickOpen} /></Col>);
         setHomesState(homes);
       });
 
@@ -58,15 +59,21 @@ export default function Homes() {
 
 function Home(props) {
   return (
-    <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src={props.home.image} />
+    <Card style={{ width: '18rem' }} data-testid="home">
+      <Card.Img data-testid="image" variant="top" src={props.home.image} />
       <Card.Body>
-        <Card.Title>{props.home.title}</Card.Title>
+        <Card.Title data-testid="title">{props.home.title}</Card.Title>
         <Card.Text>
-          {props.home.location}
+          <span data-testid="location">{props.home.location}</span>
         </Card.Text>
         <div className="d-flex justify-content-end">
-          <Button variant="primary" onClick={() => props.handleClickOpen(props.home)}>Book</Button>
+          <Button
+            data-testid="book-btn"
+            variant="primary"
+            onClick={() => props.handleClickOpen(props.home)}
+          >
+            Book
+          </Button>
         </div>
       </Card.Body>
     </Card>

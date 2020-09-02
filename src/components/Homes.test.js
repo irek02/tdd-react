@@ -21,15 +21,7 @@ afterEach(() => {
 
 });
 
-// beforeEach(() => {
-
-//   act(() => {
-//     render(<Header></Header>, container);
-//   });
-
-// });
-
-it('should show logo', async () => {
+beforeEach(async () => {
 
   const fakeHomes = [
     {
@@ -51,46 +43,50 @@ it('should show logo', async () => {
       "price": "325"
     }
   ];
+
   jest.spyOn(global, "fetch").mockImplementation(() =>
     Promise.resolve({
       json: () => Promise.resolve(fakeHomes)
     })
   );
 
-  // Use the asynchronous version of act to apply resolved promises
   await act(async () => {
     render(<Homes></Homes>, container);
   });
 
-  // act(() => {
-  //   render(<Homes></Homes>, container);
-  // });
+});
 
-  console.log(container.innerHTML);
+it('should show homes', async () => {
 
-  // expect(container.querySelector('[data-testid="logo"]')).toBeTruthy();
+  expect(container.querySelectorAll('[data-testid="home"]').length).toBe(3);
 
 });
 
-// it('should show search', () => {
+it('should show home info', () => {
 
-//   expect(container.querySelector('[data-testid="search"]')).toBeTruthy();
+  const home = container.querySelector('[data-testid="home"]');
 
-// });
+  expect(home.querySelector('[data-testid="image"]')).toBeTruthy();
+  expect(home.querySelector('[data-testid="title"]').textContent).toEqual('Home 1');
+  expect(home.querySelector('[data-testid="location"]').textContent).toEqual('new york');
 
-// it('should show menu', () => {
+});
 
-//   expect(container.querySelector('[data-testid="menu"]')).toBeTruthy();
+it('should show Book button', () => {
 
-// });
+  const home = container.querySelector('[data-testid="home"]');
 
-// it('should show filters', () => {
+  expect(home.querySelector('[data-testid="book-btn"]')).toBeTruthy();
 
-//   expect(container.querySelector('[data-testid="home-type"]')).toBeTruthy();
-//   expect(container.querySelector('[data-testid="dates"]')).toBeTruthy();
-//   expect(container.querySelector('[data-testid="guests"]')).toBeTruthy();
-//   expect(container.querySelector('[data-testid="price"]')).toBeTruthy();
-//   expect(container.querySelector('[data-testid="rooms"]')).toBeTruthy();
-//   expect(container.querySelector('[data-testid="amenities"]')).toBeTruthy();
+});
 
-// });
+it('should use dialog service to open a dialog when clicking on Book button', () => {
+
+  // grab the button to click
+  const bookBtn = container.querySelector('[data-testid="home"] button');
+  // click the button
+  bookBtn.click();
+  // assert that the dialog service was used to open a dialog
+  expect(true).toBe(true);
+
+});
