@@ -3,6 +3,10 @@ import React, { useEffect, useState } from "react";
 import { Snackbar } from "@material-ui/core";
 import { BookingDialog } from './BookingDialog';
 
+const openBookingDialog = () => {
+
+};
+
 export default function Homes() {
 
   const [homesState, setHomesState] = useState([]);

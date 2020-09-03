@@ -82,11 +82,12 @@ it('should show Book button', () => {
 
 it('should use dialog service to open a dialog when clicking on Book button', () => {
 
-  // grab the button to click
   const bookBtn = container.querySelector('[data-testid="home"] button');
-  // click the button
+
   bookBtn.click();
-  // assert that the dialog service was used to open a dialog
+
+  console.log(container.innerHTML);
+
   expect(true).toBe(true);
 
 });
