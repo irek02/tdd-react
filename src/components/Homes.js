@@ -2,10 +2,7 @@ import { Container, Row, Card, Col, Button } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import { Snackbar } from "@material-ui/core";
 import { BookingDialog } from './BookingDialog';
-
-const openBookingDialog = () => {
-
-};
+import { homesDialogService } from './irek';
 
 export default function Homes() {
 
@@ -14,7 +11,8 @@ export default function Homes() {
   const [snackBarState, setSnackBarState] = useState({ open: false, message: null });
 
   const handleClickOpen = (home) => {
-    setDialogState({ open: true, home });
+    // setDialogState({ open: true, home });
+    homesDialogService.open(home);
   };
 
   const handleClose = (message) => {
@@ -39,6 +37,14 @@ export default function Homes() {
           <Col key={i}><Home home={home} handleClickOpen={handleClickOpen} /></Col>);
         setHomesState(homes);
       });
+
+  });
+
+  useEffect(() => {
+
+    const subscription = homesDialogService.state$.subscribe(state => setDialogState(state));
+
+    return () => subscription.unsubscribe();
 
   });
 
