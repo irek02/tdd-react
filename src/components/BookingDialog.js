@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 import { Button } from 'react-bootstrap';
 import moment from 'moment';
@@ -7,7 +7,16 @@ import snackBarStateService from "../services/snackBarStateService";
 
 export function BookingDialog(props) {
 
-  const { dialogState } = props;
+  const [dialogState, setDialogState] = useState({ open: false, home: null });
+
+  useEffect(() => {
+
+    const subscription = bookingDialogStateService.state$
+      .subscribe(state => setDialogState(state));
+
+    return () => subscription.unsubscribe();
+
+  });
 
   const [formState, setFormState] = useState({ fromDate: '', untilDate: '' });
   const [totalCost, setTotalCost] = useState('--');

@@ -8,7 +8,6 @@ import snackBarStateService from "../services/snackBarStateService";
 export default function Homes() {
 
   const [homesState, setHomesState] = useState([]);
-  const [dialogState, setDialogState] = useState({ open: false, home: null });
   const [snackBarState, setSnackBarState] = useState({ open: false, message: null });
 
   useEffect(() => {
@@ -29,15 +28,6 @@ export default function Homes() {
 
   useEffect(() => {
 
-    const subscription = bookingDialogStateService.state$
-      .subscribe(state => setDialogState(state));
-
-    return () => subscription.unsubscribe();
-
-  });
-
-  useEffect(() => {
-
     const subscription = snackBarStateService.state$
       .subscribe(state => setSnackBarState(state));
 
@@ -53,7 +43,7 @@ export default function Homes() {
           {homesState}
         </Row>
       </Container>
-      <BookingDialog dialogState={dialogState} onClose={bookingDialogStateService.close} />
+      <BookingDialog onClose={bookingDialogStateService.close} />
       <Snackbar
         open={snackBarState.open}
         onClose={snackBarStateService.close}
