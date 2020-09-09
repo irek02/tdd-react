@@ -2,29 +2,14 @@ import { Container, Row, Card, Col, Button } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import { Snackbar } from "@material-ui/core";
 import { BookingDialog } from './BookingDialog';
-import { homesDialogService } from './irek';
+import bookingDialogStateService from '../services/bookingDialogStateService';
+import snackBarStateService from "../services/snackBarStateService";
 
 export default function Homes() {
 
   const [homesState, setHomesState] = useState([]);
   const [dialogState, setDialogState] = useState({ open: false, home: null });
   const [snackBarState, setSnackBarState] = useState({ open: false, message: null });
-
-  const handleClickOpen = (home) => {
-    // setDialogState({ open: true, home });
-    homesDialogService.open(home);
-  };
-
-  const handleClose = (message) => {
-    setDialogState({ open: false, home: null });
-    if (message) {
-      setSnackBarState({ open: true, message });
-    }
-  };
-
-  const handleSnackBarClose = () => {
-    setSnackBarState({ open: false, message: null });
-  };
 
   useEffect(() => {
 
@@ -34,7 +19,9 @@ export default function Homes() {
       .then(response => response.json())
       .then(responseJson => {
         const homes = responseJson.map((home, i) =>
-          <Col key={i}><Home home={home} handleClickOpen={handleClickOpen} /></Col>);
+          <Col key={i}>
+            <Home home={home} handleClickOpen={() => bookingDialogStateService.open(home)} />
+          </Col>);
         setHomesState(homes);
       });
 
@@ -42,28 +29,38 @@ export default function Homes() {
 
   useEffect(() => {
 
-    const subscription = homesDialogService.state$.subscribe(state => setDialogState(state));
+    const subscription = bookingDialogStateService.state$
+      .subscribe(state => setDialogState(state));
+
+    return () => subscription.unsubscribe();
+
+  });
+
+  useEffect(() => {
+
+    const subscription = snackBarStateService.state$
+      .subscribe(state => setSnackBarState(state));
 
     return () => subscription.unsubscribe();
 
   });
 
   return (
-    <div>
+    <>
       <Container className="m-2">
         <h1>Homes</h1>
         <Row>
           {homesState}
         </Row>
       </Container>
-      <BookingDialog dialogState={dialogState} onClose={handleClose} />
+      <BookingDialog dialogState={dialogState} onClose={bookingDialogStateService.close} />
       <Snackbar
         open={snackBarState.open}
-        onClose={handleSnackBarClose}
+        onClose={snackBarStateService.close}
         autoHideDuration={3000}
         message={snackBarState.message}
       />
-    </div>
+    </>
   );
 }
 

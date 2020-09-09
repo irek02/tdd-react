@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 import { Button } from 'react-bootstrap';
 import moment from 'moment';
+import bookingDialogStateService from '../services/bookingDialogStateService';
+import snackBarStateService from "../services/snackBarStateService";
 
 export function BookingDialog(props) {
 
-  const { onClose, dialogState } = props;
+  const { dialogState } = props;
 
   const [formState, setFormState] = useState({ fromDate: '', untilDate: '' });
   const [totalCost, setTotalCost] = useState('--');
-
-  const handleClose = (message) => onClose(message);
 
   const handleFromDateChange = event => {
     const fromDate = event.target.value;
@@ -41,7 +41,8 @@ export function BookingDialog(props) {
   const handleBooking = async () => {
     const response = await fetch('https://run.mocky.io/v3/4a53ec91-a1e2-4a38-8a3f-188d7173fc5f');
     const responseJson = await response.json();
-    handleClose(responseJson.response);
+    bookingDialogStateService.close();
+    snackBarStateService.open(responseJson.response);
   };
 
   if (!dialogState.open) {
@@ -52,7 +53,7 @@ export function BookingDialog(props) {
     <Dialog
       maxWidth='xs'
       fullWidth={true}
-      onClose={handleClose}
+      onClose={props.onClose}
       open={dialogState.open}
     >
       <DialogTitle id="simple-dialog-title">Book {dialogState.home.title}</DialogTitle>
