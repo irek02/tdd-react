@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 import { Button } from 'react-bootstrap';
 import moment from 'moment';
-import bookingDialogStateService from '../services/bookingDialogStateService';
-import snackBarStateService from "../services/snackBarStateService";
+import bookingDialogService from '../services/bookingDialogService';
+import notificationService from "../services/notificationService";
 
 export function BookingDialog(props) {
 
-  const [dialogState, setDialogState] = useState({ open: false, home: null });
+  const [dialogState, setDialogState] = useState({});
 
   useEffect(() => {
 
-    const subscription = bookingDialogStateService.state$
+    const subscription = bookingDialogService.events$
       .subscribe(state => setDialogState(state));
 
     return () => subscription.unsubscribe();
@@ -50,8 +50,8 @@ export function BookingDialog(props) {
   const handleBooking = async () => {
     const response = await fetch('https://run.mocky.io/v3/4a53ec91-a1e2-4a38-8a3f-188d7173fc5f');
     const responseJson = await response.json();
-    bookingDialogStateService.close();
-    snackBarStateService.open(responseJson.response);
+    bookingDialogService.close();
+    notificationService.open(responseJson.response);
   };
 
   if (!dialogState.open) {

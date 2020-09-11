@@ -1,14 +1,12 @@
 import { Container, Row, Card, Col, Button } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
-import { Snackbar } from "@material-ui/core";
 import { BookingDialog } from './BookingDialog';
-import bookingDialogStateService from '../services/bookingDialogStateService';
-import snackBarStateService from "../services/snackBarStateService";
+import bookingDialogService from '../services/bookingDialogService';
+import Notification from "./Notification";
 
 export default function Homes() {
 
   const [homesState, setHomesState] = useState([]);
-  const [snackBarState, setSnackBarState] = useState({ open: false, message: null });
 
   useEffect(() => {
 
@@ -19,19 +17,10 @@ export default function Homes() {
       .then(responseJson => {
         const homes = responseJson.map((home, i) =>
           <Col key={i}>
-            <Home home={home} handleClickOpen={() => bookingDialogStateService.open(home)} />
+            <Home home={home} handleClickOpen={() => bookingDialogService.open(home)} />
           </Col>);
         setHomesState(homes);
       });
-
-  });
-
-  useEffect(() => {
-
-    const subscription = snackBarStateService.state$
-      .subscribe(state => setSnackBarState(state));
-
-    return () => subscription.unsubscribe();
 
   });
 
@@ -43,13 +32,8 @@ export default function Homes() {
           {homesState}
         </Row>
       </Container>
-      <BookingDialog onClose={bookingDialogStateService.close} />
-      <Snackbar
-        open={snackBarState.open}
-        onClose={snackBarStateService.close}
-        autoHideDuration={3000}
-        message={snackBarState.message}
-      />
+      <BookingDialog onClose={bookingDialogService.close} />
+      <Notification />
     </>
   );
 }
