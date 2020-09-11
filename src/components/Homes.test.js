@@ -1,10 +1,47 @@
 import React from "react";
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
+import bookingDialogService from "../services/bookingDialogService";
 
 import Homes from "./Homes";
 
 let container = null;
+
+jest.mock("../services/bookingDialogService");
+jest.mock("./BookingDialog", () => {
+  return function BookingDialog() {
+    return (
+      <></>
+    );
+  };
+});
+
+const fakeHomes = [
+  {
+    "title": "Home 1",
+    "image": "listing.jpg",
+    "location": "new york",
+    "price": "125"
+  },
+  {
+    "title": "Home 2",
+    "image": "listing.jpg",
+    "location": "boston",
+    "price": "225"
+  },
+  {
+    "title": "Home 3",
+    "image": "listing.jpg",
+    "location": "chicago",
+    "price": "325"
+  }
+];
+
+jest.spyOn(global, "fetch").mockImplementation(() =>
+  Promise.resolve({
+    json: () => Promise.resolve(fakeHomes)
+  })
+);
 
 beforeEach(() => {
 
@@ -22,33 +59,6 @@ afterEach(() => {
 });
 
 beforeEach(async () => {
-
-  const fakeHomes = [
-    {
-      "title": "Home 1",
-      "image": "listing.jpg",
-      "location": "new york",
-      "price": "125"
-    },
-    {
-      "title": "Home 2",
-      "image": "listing.jpg",
-      "location": "boston",
-      "price": "225"
-    },
-    {
-      "title": "Home 3",
-      "image": "listing.jpg",
-      "location": "chicago",
-      "price": "325"
-    }
-  ];
-
-  jest.spyOn(global, "fetch").mockImplementation(() =>
-    Promise.resolve({
-      json: () => Promise.resolve(fakeHomes)
-    })
-  );
 
   await act(async () => {
     render(<Homes></Homes>, container);
@@ -86,8 +96,11 @@ it('should use dialog service to open a dialog when clicking on Book button', ()
 
   bookBtn.click();
 
-  console.log(container.innerHTML);
-
-  expect(true).toBe(true);
+  expect(bookingDialogService.open).toHaveBeenCalledWith({
+    "title": "Home 1",
+    "image": "listing.jpg",
+    "location": "new york",
+    "price": "125"
+  });
 
 });

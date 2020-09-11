@@ -1,6 +1,6 @@
 import { Container, Row, Card, Col, Button } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
-import { BookingDialog } from './BookingDialog';
+import BookingDialog from './BookingDialog';
 import bookingDialogService from '../services/bookingDialogService';
 import Notification from "./Notification";
 

@@ -5,7 +5,7 @@ import moment from 'moment';
 import bookingDialogService from '../services/bookingDialogService';
 import notificationService from "../services/notificationService";
 
-export function BookingDialog(props) {
+export default function BookingDialog(props) {
 
   const [dialogState, setDialogState] = useState({});
 
