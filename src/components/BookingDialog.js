@@ -12,7 +12,11 @@ export default function BookingDialog(props) {
   useEffect(() => {
 
     const subscription = bookingDialogService.events$
-      .subscribe(state => setDialogState(state));
+      // .subscribe(state => setDialogState(state));
+      .subscribe(state => {
+        setDialogState(state);
+        console.log(state);
+      });
 
     return () => subscription.unsubscribe();
 
@@ -54,11 +58,15 @@ export default function BookingDialog(props) {
     notificationService.open(responseJson.response);
   };
 
+  console.log('render', dialogState.open);
+
   if (!dialogState.open) {
     return null;
   }
 
   return (
+    <>
+    <div>Hello</div>
     <Dialog
       maxWidth='xs'
       fullWidth={true}
@@ -96,6 +104,7 @@ export default function BookingDialog(props) {
         <Button variant="primary" onClick={handleBooking}>Book</Button>
       </DialogActions>
     </Dialog>
+    </>
   );
 
 }
