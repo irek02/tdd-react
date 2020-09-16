@@ -1,8 +1,9 @@
 import { Container, Row, Card, Col, Button } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
-import BookingDialog from './BookingDialog';
+import HomeBooking from './HomeBooking';
 import bookingDialogService from '../services/bookingDialogService';
 import Notification from "./Notification";
+import { Dialog, DialogContent } from "@material-ui/core";
 
 export default function Homes() {
 
@@ -24,6 +25,21 @@ export default function Homes() {
 
   });
 
+  const [dialogState, setDialogState] = useState({ open: false, home: null });
+
+  useEffect(() => {
+
+    const subscription = bookingDialogService.events$
+      // .subscribe(state => setDialogState(state));
+      .subscribe(state => {
+        setDialogState(state);
+        console.log(state);
+      });
+
+    return () => subscription.unsubscribe();
+
+  });
+
   return (
     <>
       <Container className="m-2">
@@ -32,7 +48,16 @@ export default function Homes() {
           {homesState}
         </Row>
       </Container>
-      <BookingDialog onClose={bookingDialogService.close} />
+      <Dialog
+        maxWidth='xs'
+        fullWidth={true}
+        onClose={bookingDialogService.close}
+        open={dialogState.open}
+      >
+        <DialogContent>
+          <HomeBooking home={dialogState.home}></HomeBooking>
+        </DialogContent>
+      </Dialog>
       <Notification />
     </>
   );
