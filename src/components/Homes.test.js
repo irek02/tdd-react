@@ -7,15 +7,6 @@ import Homes from "./Homes";
 
 let container = null;
 
-jest.mock("../services/bookingDialogService");
-jest.mock("./BookingDialog", () => {
-  return function BookingDialog() {
-    return (
-      <></>
-    );
-  };
-});
-
 const fakeHomes = [
   {
     "title": "Home 1",
@@ -91,6 +82,8 @@ it('should show Book button', () => {
 });
 
 it('should use dialog service to open a dialog when clicking on Book button', () => {
+
+  jest.spyOn(bookingDialogService, 'open');
 
   const bookBtn = container.querySelector('[data-testid="home"] button');
 

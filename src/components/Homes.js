@@ -30,11 +30,7 @@ export default function Homes() {
   useEffect(() => {
 
     const subscription = bookingDialogService.events$
-      // .subscribe(state => setDialogState(state));
-      .subscribe(state => {
-        setDialogState(state);
-        console.log(state);
-      });
+      .subscribe(state => setDialogState(state));
 
     return () => subscription.unsubscribe();
 
