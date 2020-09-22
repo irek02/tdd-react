@@ -86,8 +86,6 @@ beforeEach(async () => {
 
 it('should show homes', async () => {
 
-  console.log(container.innerHTML);
-
   expect(true).toBe(true);
   // expect(container.querySelectorAll('[data-testid="home"]').length).toBe(3);
 
@@ -95,50 +93,55 @@ it('should show homes', async () => {
 
 it('should show title', () => {
 
-  expect(container.querySelectorAll('[data-test="title"]')).toEqual('Book Home 1');
+  expect(container.querySelector('[data-testid="title"]').textContent).toEqual('Book Home 1');
 
 });
 
-// it('should show price', () => {
+it('should show price', () => {
 
-//   expect(el('[data-test="price"]').textContent)
-//     .toContain('$125 per night');
+  expect(container.querySelector('[data-testid="price"]').textContent).toContain('$125 per night');
 
-// });
+});
 
-// it('should show check in date field', () => {
+it('should show check in date field', () => {
 
-//   expect(el('[data-test="check-in"]'))
-//     .toBeTruthy();
+  expect(container.querySelector('[data-testid="check-in"]')).toBeTruthy();
 
-// });
+});
 
-// it('should show check out date field', () => {
+it('should show check out date field', () => {
 
-//   expect(el('[data-test="check-out"]'))
-//     .toBeTruthy();
+  expect(container.querySelector('[data-testid="check-out"]')).toBeTruthy();
 
-// });
+});
 
-// it('should show total', () => {
+it('should show total', async () => {
 
-//   // user enters check in date: 12/20/19
-//   const checkIn = el('[data-test="check-in"] input');
-//   checkIn.value = '12/20/19';
-//   checkIn.dispatchEvent(new Event('input'));
+  // user enters check in date: 12/20/19
+  const checkIn = container.querySelector('[data-testid="check-in"] input');
+  await act(async () => {
+    checkIn.value = '12/20/19';
+  });
+  await act(async () => {
+    checkIn.dispatchEvent(new Event('input', {target: { value: '12/20/19' }, bubbles: true}));
+  });
+  await act(async () => {
+    render(<HomeBooking home={home}></HomeBooking>, container);
+  });
+  // user enter check out date: 12/23/19
+  const checkOut = container.querySelector('[data-testid="check-out"] input');
+  await act(async() => {
+  checkOut.value = '12/23/19';
+    checkOut.dispatchEvent(new Event('input', {bubbles: true}));
+  });
+  // act(() => checkOut.dispatchEvent(new Event('input')));
 
-//   // user enter check out date: 12/23/19
-//   const checkOut = el('[data-test="check-out"] input');
-//   checkOut.value = '12/23/19';
-//   checkOut.dispatchEvent(new Event('input'));
+  // fixture.detectChanges();
 
-//   fixture.detectChanges();
+  // assert that the total shows 3x125=375
+  expect(container.querySelector('[data-testid="total"]').textContent).toContain('Total: $375');
 
-//   // assert that the total shows 3x125=375
-//   expect(el('[data-test="total"]').textContent)
-//     .toContain('Total: $375');
-
-// });
+});
 
 // it('should show -- for total when dates are invalid', () => {
 

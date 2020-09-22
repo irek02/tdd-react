@@ -14,6 +14,7 @@ export default function HomeBooking(props) {
   }
 
   const handleFromDateChange = event => {
+    console.log('from change', event.target.value);
     const fromDate = event.target.value;
     setFormState({ ...formState, fromDate });
     setTotalCost(calculateTotal(fromDate, formState.untilDate));
@@ -48,11 +49,11 @@ export default function HomeBooking(props) {
 
   return (
     <>
-      <h1>Book {props.home.title}</h1>
-      <div className="mb-3">
+      <h1 data-testid="title">Book {props.home.title}</h1>
+      <div data-testid="price" className="mb-3">
         <span className="font-weight-bold text-primary text-large">${props.home.price}</span> per night
       </div>
-      <div className="form-group">
+      <div data-testid="check-in" className="form-group">
         <label htmlFor="checkInDate">Choose your check-in date</label>
         <input
           id="checkInDate"
@@ -61,7 +62,7 @@ export default function HomeBooking(props) {
           value={formState.fromDate}
           onChange={handleFromDateChange} />
       </div>
-      <div className="form-group">
+      <div data-testid="check-out" className="form-group">
         <label htmlFor="checkOutDate">Choose your check-out date</label>
         <input
           id="checkOutDate"
@@ -70,7 +71,7 @@ export default function HomeBooking(props) {
           value={formState.untilDate}
           onChange={handleUntilDateChange} />
       </div>
-      <div className="my-3 text-right">
+      <div data-testid="total" className="my-3 text-right">
         <span className="font-weight-bold text-large">Total: {totalCost}</span>
       </div>
       <div className="d-flex justify-content-end">
