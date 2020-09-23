@@ -120,14 +120,19 @@ it('should show total', async () => {
   // user enters check in date: 12/20/19
   const checkIn = container.querySelector('[data-testid="check-in"] input');
   await act(async () => {
-    checkIn.value = '12/20/19';
+    checkIn.value = "2020-09-23";
   });
   await act(async () => {
-    checkIn.dispatchEvent(new Event('input', {target: { value: '12/20/19' }, bubbles: true}));
+    checkIn.dispatchEvent(new Event('change', {target: { value: "2020-09-23" }, bubbles: true}));
+    // checkIn.dispatchEvent(new Event('change', {target: { value: '12/20/19' }, bubbles: true}));
   });
-  await act(async () => {
-    render(<HomeBooking home={home}></HomeBooking>, container);
-  });
+  // await act(async () => {
+  //   checkIn.value = '12/20/20';
+  //   checkIn.dispatchEvent(new Event('input', {target: { value: '12/20/19' }, bubbles: true, cancelable: false}));
+  // });
+  // await act(async () => {
+  //   render(<HomeBooking home={home}></HomeBooking>, container);
+  // });
   // user enter check out date: 12/23/19
   const checkOut = container.querySelector('[data-testid="check-out"] input');
   await act(async() => {
