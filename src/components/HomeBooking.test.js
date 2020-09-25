@@ -1,48 +1,10 @@
 import React from "react";
-import { render, unmountComponentAtNode } from "react-dom";
-import { act } from "react-dom/test-utils";
+import { render, fireEvent, getByTestId, act } from '@testing-library/react'
+import HomeBooking from "./HomeBooking";
+import notificationService from "../services/notificationService";
 import bookingDialogService from "../services/bookingDialogService";
 
-// import BookingDialog from "./BookingDialog";
-import HomeBooking from "./HomeBooking";
-
 let container = null;
-
-// jest.mock("../services/bookingDialogService");
-// jest.mock("./BookingDialog", () => {
-//   return function BookingDialog() {
-//     return (
-//       <></>
-//     );
-//   };
-// });
-
-// const fakeHomes = [
-//   {
-//     "title": "Home 1",
-//     "image": "listing.jpg",
-//     "location": "new york",
-//     "price": "125"
-//   },
-//   {
-//     "title": "Home 2",
-//     "image": "listing.jpg",
-//     "location": "boston",
-//     "price": "225"
-//   },
-//   {
-//     "title": "Home 3",
-//     "image": "listing.jpg",
-//     "location": "chicago",
-//     "price": "325"
-//   }
-// ];
-
-// jest.spyOn(global, "fetch").mockImplementation(() =>
-//   Promise.resolve({
-//     json: () => Promise.resolve(fakeHomes)
-//   })
-// );
 
 const home = {
   "title": "Home 1",
@@ -51,164 +13,127 @@ const home = {
   "price": "125"
 };
 
-beforeEach(() => {
-
-  container = document.createElement("div");
-  document.body.appendChild(container);
-
-});
-
-afterEach(() => {
-
-  unmountComponentAtNode(container);
-  container.remove();
-  container = null;
-
-});
-
 beforeEach(async () => {
 
-  await act(async () => {
-    render(<HomeBooking home={home}></HomeBooking>, container);
-  });
-  // await act(async () => {
-  //   bookingDialogService.open(
-  //     {
-  //       "title": "Home 3",
-  //       "image": "listing.jpg",
-  //       "location": "chicago",
-  //       "price": "325"
-  //     }
-  //   );
-  // });
-
-});
-
-it('should show homes', async () => {
-
-  expect(true).toBe(true);
-  // expect(container.querySelectorAll('[data-testid="home"]').length).toBe(3);
+  container = render(
+    <div>
+      <HomeBooking home={home}></HomeBooking>
+    </div>,
+  ).container;
 
 });
 
 it('should show title', () => {
 
-  expect(container.querySelector('[data-testid="title"]').textContent).toEqual('Book Home 1');
+  expect(getByTestId(container, 'title').textContent).toEqual('Book Home 1');
 
 });
 
 it('should show price', () => {
 
-  expect(container.querySelector('[data-testid="price"]').textContent).toContain('$125 per night');
+  expect(getByTestId(container, 'price').textContent).toContain('$125 per night');
 
 });
 
 it('should show check in date field', () => {
 
-  expect(container.querySelector('[data-testid="check-in"]')).toBeTruthy();
+  expect(getByTestId(container, 'check-in')).toBeTruthy();
 
 });
 
 it('should show check out date field', () => {
 
-  expect(container.querySelector('[data-testid="check-out"]')).toBeTruthy();
+  expect(getByTestId(container, 'check-out')).toBeTruthy();
 
 });
 
 it('should show total', async () => {
 
-  // user enters check in date: 12/20/19
-  const checkIn = container.querySelector('[data-testid="check-in"] input');
-  await act(async () => {
-    checkIn.value = "2020-09-23";
-  });
-  await act(async () => {
-    checkIn.dispatchEvent(new Event('change', {target: { value: "2020-09-23" }, bubbles: true}));
-    // checkIn.dispatchEvent(new Event('change', {target: { value: '12/20/19' }, bubbles: true}));
-  });
-  // await act(async () => {
-  //   checkIn.value = '12/20/20';
-  //   checkIn.dispatchEvent(new Event('input', {target: { value: '12/20/19' }, bubbles: true, cancelable: false}));
-  // });
-  // await act(async () => {
-  //   render(<HomeBooking home={home}></HomeBooking>, container);
-  // });
-  // user enter check out date: 12/23/19
-  const checkOut = container.querySelector('[data-testid="check-out"] input');
-  await act(async() => {
-  checkOut.value = '12/23/19';
-    checkOut.dispatchEvent(new Event('input', {bubbles: true}));
-  });
-  // act(() => checkOut.dispatchEvent(new Event('input')));
+  fireEvent.change(
+    getByTestId(container, 'check-in'),
+    { target: { value: '2019-12-20' } }
+  );
 
-  // fixture.detectChanges();
+  fireEvent.change(
+    getByTestId(container, 'check-out'),
+    { target: { value: '2019-12-23' } }
+  );
 
   // assert that the total shows 3x125=375
   expect(container.querySelector('[data-testid="total"]').textContent).toContain('Total: $375');
 
 });
 
-// it('should show -- for total when dates are invalid', () => {
+it('should show "-- for total when dates are invalid', () => {
 
-//   const checkIn = el('[data-test="check-in"] input');
-//   checkIn.value = '';
-//   checkIn.dispatchEvent(new Event('input'));
+  fireEvent.change(
+    getByTestId(container, 'check-in'),
+    { target: { value: '' } }
+  );
 
-//   const checkOut = el('[data-test="check-out"] input');
-//   checkOut.value = '';
-//   checkOut.dispatchEvent(new Event('input'));
+  fireEvent.change(
+    getByTestId(container, 'check-out'),
+    { target: { value: '' } }
+  );
 
-//   fixture.detectChanges();
+  expect(getByTestId(container, 'total').textContent)
+    .toContain('Total: --');
 
-//   expect(el('[data-test="total"]').textContent)
-//     .toContain('Total: --');
+});
 
-// });
+it('should book home after clicking the Book button', () => {
 
-// it('should book home after clicking the Book button', () => {
+  jest.spyOn(global, "fetch").mockImplementation(() =>
+    Promise.resolve({
+      json: () => Promise.resolve('Home booked!')
+    })
+  );
 
-//   dataService.bookHome$.and.returnValue(of(null));
+  fireEvent.change(
+    getByTestId(container, 'check-in'),
+    { target: { value: '2019-12-20' } }
+  );
 
-//   // user enters check in date: 12/20/19
-//   const checkIn = el('[data-test="check-in"] input');
-//   checkIn.value = '12/20/19';
-//   checkIn.dispatchEvent(new Event('input'));
+  fireEvent.change(
+    getByTestId(container, 'check-out'),
+    { target: { value: '2019-12-23' } }
+  );
 
-//   // user enter check out date: 12/23/19
-//   const checkOut = el('[data-test="check-out"] input');
-//   checkOut.value = '12/23/19';
-//   checkOut.dispatchEvent(new Event('input'));
+  // click in the Book
+  getByTestId(container, 'book-btn').click();
 
-//   fixture.detectChanges();
+  // assert that the data service was used to book the home
+  expect(global.fetch).toHaveBeenCalled();
 
-//   // click in the Book
-//   el('[data-test="book-btn"] button').click();
+});
 
-//   // assert that the data service was used to book the home
-//   expect(dataService.bookHome$).toHaveBeenCalled();
+it('should close the dialog and show notification after clicking Book button', async () => {
 
-// });
+  jest.spyOn(global, "fetch").mockImplementation(() =>
+    Promise.resolve({
+      json: () => Promise.resolve('Home booked!')
+    })
+  );
+  jest.spyOn(bookingDialogService, 'close');
+  jest.spyOn(notificationService, 'open');
 
-// it('should close the dialog and show notification after clicking Book button', () => {
+  // user enters check in date: 12/20/19
+  fireEvent.change(
+    getByTestId(container, 'check-in'),
+    { target: { value: '2019-12-20' } }
+  );
 
-//   dataService.bookHome$.and.returnValue(of(null));
+  fireEvent.change(
+    getByTestId(container, 'check-out'),
+    { target: { value: '2019-12-23' } }
+  );
 
-//   // user enters check in date: 12/20/19
-//   const checkIn = el('[data-test="check-in"] input');
-//   checkIn.value = '12/20/19';
-//   checkIn.dispatchEvent(new Event('input'));
+  // click in the Book
+  getByTestId(container, 'book-btn').click();
 
-//   // user enter check out date: 12/23/19
-//   const checkOut = el('[data-test="check-out"] input');
-//   checkOut.value = '12/23/19';
-//   checkOut.dispatchEvent(new Event('input'));
+  await act(async () => {});
 
-//   fixture.detectChanges();
+  expect(bookingDialogService.close).toHaveBeenCalled();
+  expect(notificationService.open).toHaveBeenCalled();
 
-//   // click in the Book
-//   el('[data-test="book-btn"] button').click();
-
-//   expect(dialogService.close).toHaveBeenCalled();
-//   expect(notificationService.open).toHaveBeenCalled();
-
-// });
+});

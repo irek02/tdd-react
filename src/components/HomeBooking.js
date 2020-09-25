@@ -10,11 +10,10 @@ export default function HomeBooking(props) {
   const [totalCost, setTotalCost] = useState('--');
 
   if (!props.home) {
-    return <></>;
+    return '';
   }
 
   const handleFromDateChange = event => {
-    console.log('from change', event.target.value);
     const fromDate = event.target.value;
     setFormState({ ...formState, fromDate });
     setTotalCost(calculateTotal(fromDate, formState.untilDate));
@@ -53,18 +52,21 @@ export default function HomeBooking(props) {
       <div data-testid="price" className="mb-3">
         <span className="font-weight-bold text-primary text-large">${props.home.price}</span> per night
       </div>
-      <div data-testid="check-in" className="form-group">
+      <div className="form-group">
         <label htmlFor="checkInDate">Choose your check-in date</label>
         <input
+          data-testid="check-in"
           id="checkInDate"
           type="date"
           className="form-control"
           value={formState.fromDate}
-          onChange={handleFromDateChange} />
+          onChange={handleFromDateChange}
+        />
       </div>
-      <div data-testid="check-out" className="form-group">
+      <div className="form-group">
         <label htmlFor="checkOutDate">Choose your check-out date</label>
         <input
+          data-testid="check-out"
           id="checkOutDate"
           type="date"
           className="form-control"
@@ -75,7 +77,7 @@ export default function HomeBooking(props) {
         <span className="font-weight-bold text-large">Total: {totalCost}</span>
       </div>
       <div className="d-flex justify-content-end">
-        <Button variant="primary" onClick={handleBooking}>Book</Button>
+        <Button data-testid="book-btn" variant="primary" onClick={handleBooking}>Book</Button>
       </div>
     </>
   );
