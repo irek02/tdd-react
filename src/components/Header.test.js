@@ -1,6 +1,5 @@
+import { getByTestId, render } from "@testing-library/react";
 import React from "react";
-import { render, unmountComponentAtNode } from "react-dom";
-import { act } from "react-dom/test-utils";
 
 import Header from "./Header";
 
@@ -8,52 +7,39 @@ let container = null;
 
 beforeEach(() => {
 
-  container = document.createElement("div");
-  document.body.appendChild(container);
-
-});
-
-afterEach(() => {
-
-  unmountComponentAtNode(container);
-  container.remove();
-  container = null;
-
-});
-
-beforeEach(() => {
-
-  act(() => {
-    render(<Header></Header>, container);
-  });
+  container = render(
+    <div>
+      <Header></Header>
+    </div>,
+  ).container;
 
 });
 
 it('should show logo', () => {
 
-  expect(container.querySelector('[data-testid="logo"]')).toBeTruthy();
+  expect(getByTestId(container, 'logo')).toBeTruthy();
 
 });
 
 it('should show search', () => {
 
-  expect(container.querySelector('[data-testid="search"]')).toBeTruthy();
+  expect(getByTestId(container, 'search')).toBeTruthy();
 
 });
 
 it('should show menu', () => {
 
-  expect(container.querySelector('[data-testid="menu"]')).toBeTruthy();
+  expect(getByTestId(container, 'menu')).toBeTruthy();
 
 });
 
 it('should show filters', () => {
 
-  expect(container.querySelector('[data-testid="home-type"]')).toBeTruthy();
-  expect(container.querySelector('[data-testid="dates"]')).toBeTruthy();
-  expect(container.querySelector('[data-testid="guests"]')).toBeTruthy();
-  expect(container.querySelector('[data-testid="price"]')).toBeTruthy();
-  expect(container.querySelector('[data-testid="rooms"]')).toBeTruthy();
-  expect(container.querySelector('[data-testid="amenities"]')).toBeTruthy();
+  expect(getByTestId(container, 'home-type')).toBeTruthy();
+  expect(getByTestId(container, 'dates')).toBeTruthy();
+  expect(getByTestId(container, 'guests')).toBeTruthy();
+  expect(getByTestId(container, 'price')).toBeTruthy();
+  expect(getByTestId(container, 'rooms')).toBeTruthy();
+  expect(getByTestId(container, 'amenities')).toBeTruthy();
 
 });

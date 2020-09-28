@@ -40,7 +40,9 @@ export default function HomeBooking(props) {
   }
 
   const handleBooking = async () => {
-    const response = await fetch('https://run.mocky.io/v3/4a53ec91-a1e2-4a38-8a3f-188d7173fc5f');
+    const response = await fetch(
+      'https://run.mocky.io/v3/4a53ec91-a1e2-4a38-8a3f-188d7173fc5f'
+    );
     const responseJson = await response.json();
     bookingDialogService.close();
     notificationService.open(responseJson.response);
@@ -50,7 +52,9 @@ export default function HomeBooking(props) {
     <>
       <h1 data-testid="title">Book {props.home.title}</h1>
       <div data-testid="price" className="mb-3">
-        <span className="font-weight-bold text-primary text-large">${props.home.price}</span> per night
+        <span className="font-weight-bold text-primary text-large">
+          ${props.home.price}
+        </span> per night
       </div>
       <div className="form-group">
         <label htmlFor="checkInDate">Choose your check-in date</label>
@@ -74,10 +78,17 @@ export default function HomeBooking(props) {
           onChange={handleUntilDateChange} />
       </div>
       <div data-testid="total" className="my-3 text-right">
-        <span className="font-weight-bold text-large">Total: {totalCost}</span>
+        <span className="font-weight-bold text-large">
+          Total: {totalCost}
+        </span>
       </div>
       <div className="d-flex justify-content-end">
-        <Button data-testid="book-btn" variant="primary" onClick={handleBooking}>Book</Button>
+        <Button
+          data-testid="book-btn"
+          variant="primary"
+          onClick={handleBooking}>
+          Book
+        </Button>
       </div>
     </>
   );

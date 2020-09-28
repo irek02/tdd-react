@@ -1,6 +1,5 @@
 import React from "react";
-import { render, unmountComponentAtNode } from "react-dom";
-import { act } from "react-dom/test-utils";
+import { act, getAllByTestId, getByTestId, render } from "@testing-library/react";
 import bookingDialogService from "../services/bookingDialogService";
 
 import Homes from "./Homes";
@@ -34,50 +33,39 @@ jest.spyOn(global, "fetch").mockImplementation(() =>
   })
 );
 
-beforeEach(() => {
-
-  container = document.createElement("div");
-  document.body.appendChild(container);
-
-});
-
-afterEach(() => {
-
-  unmountComponentAtNode(container);
-  container.remove();
-  container = null;
-
-});
-
 beforeEach(async () => {
 
-  await act(async () => {
-    render(<Homes></Homes>, container);
-  });
+  container = render(
+    <div>
+      <Homes></Homes>
+    </div>,
+  ).container;
+
+  await act(async () => {});
 
 });
 
 it('should show homes', async () => {
 
-  expect(container.querySelectorAll('[data-testid="home"]').length).toBe(3);
+  expect(getAllByTestId(container, 'home').length).toBeTruthy();
 
 });
 
 it('should show home info', () => {
 
-  const home = container.querySelector('[data-testid="home"]');
+  const home = getAllByTestId(container, 'home')[0];
 
-  expect(home.querySelector('[data-testid="image"]')).toBeTruthy();
-  expect(home.querySelector('[data-testid="title"]').textContent).toEqual('Home 1');
-  expect(home.querySelector('[data-testid="location"]').textContent).toEqual('new york');
+  expect(getByTestId(home, 'image')).toBeTruthy();
+  expect(getByTestId(home, 'title')).toBeTruthy();
+  expect(getByTestId(home, 'location')).toBeTruthy();
 
 });
 
 it('should show Book button', () => {
 
-  const home = container.querySelector('[data-testid="home"]');
+  const home = getAllByTestId(container, 'home')[0];
 
-  expect(home.querySelector('[data-testid="book-btn"]')).toBeTruthy();
+  expect(getByTestId(home, 'book-btn')).toBeTruthy();
 
 });
 
