@@ -73,9 +73,9 @@ it('should use dialog service to open a dialog when clicking on Book button', ()
 
   jest.spyOn(bookingDialogService, 'open');
 
-  const bookBtn = container.querySelector('[data-testid="home"] button');
+  const homeBookBtn = getAllByTestId(container, 'book-btn')[0];
 
-  bookBtn.click();
+  homeBookBtn.click();
 
   expect(bookingDialogService.open).toHaveBeenCalledWith({
     "title": "Home 1",
