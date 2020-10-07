@@ -25,18 +25,18 @@ let homesData = [];
 
 export default function Homes() {
 
-  // const [homesState, setHomesState] = useState([]);
+  const [homesState, setHomesState] = useState([]);
 
 
   useEffect(() => {
 
     fetch('https://run.mocky.io/v3/6474432c-4bae-4807-bfbe-427b252f0b76')
       .then(homes => homes.json())
-      .then(homes => homesData = homes);
+      .then(homes => setHomesState(homes));
 
   });
 
-  const homes = homesData.map((home, i) => {
+  const homes = homesState.map((home, i) => {
     return (
       <div data-testid="home" key={ i }>
         <img data-testid="image" src={ home.image } alt="" />
