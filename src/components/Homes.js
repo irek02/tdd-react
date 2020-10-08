@@ -1,58 +1,41 @@
 import React, { useEffect, useState } from 'react';
-
-// const homesData = [
-//   {
-//     "title": "Home 1",
-//     "image": "listing.jpg",
-//     "location": "new york",
-//     "price": "125"
-//   },
-//   {
-//     "title": "Home 2",
-//     "image": "listing.jpg",
-//     "location": "boston",
-//     "price": "225"
-//   },
-//   {
-//     "title": "Home 3",
-//     "image": "listing.jpg",
-//     "location": "chicago",
-//     "price": "325"
-//   }
-// ];
-
-let homesData = [];
+import { Card, Col, Container, Row } from 'react-bootstrap';
+import apiClientService from '../services/apiClientService';
 
 export default function Homes() {
 
   const [homesState, setHomesState] = useState([]);
 
-
   useEffect(() => {
 
-    fetch('https://run.mocky.io/v3/6474432c-4bae-4807-bfbe-427b252f0b76')
-      .then(homes => homes.json())
+    apiClientService.getHomes()
       .then(homes => setHomesState(homes));
 
-  });
+  }, []);
 
   const homes = homesState.map((home, i) => {
     return (
-      <div data-testid="home" key={ i }>
-        <img data-testid="image" src={ home.image } alt="" />
-        <div data-testid="title">
-          { home.title }
-        </div>
-        <div data-testid="location">
-          { home.location }
-        </div>
-      </div>
+      <Col key={i}>
+        <Card data-testid="home" style={ { width: '350px' } }>
+          <Card.Img data-testid="home-image" variant="top" src={ home.image } alt="" />
+          <Card.Body>
+            <Card.Title data-testid="home-title">{ home.title }</Card.Title>
+            <Card.Text data-testid="home-location">{ home.location }</Card.Text>
+            <Card.Text data-testid="home-price">${ home.price } per night</Card.Text>
+          </Card.Body>
+        </Card>
+      </Col>
     );
   });
 
   return (
     <>
-      { homes }
+      <Container className="m-2">
+        <h1>Homes</h1>
+        <Row>
+          { homes }
+        </Row>
+      </Container>
     </>
   );
 }
