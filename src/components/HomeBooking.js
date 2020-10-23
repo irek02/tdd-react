@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
 import moment from 'moment';
 import bookingDialogService from '../services/bookingDialogService';
 import notificationService from "../services/notificationService";
@@ -83,12 +82,13 @@ export default function HomeBooking(props) {
         </span>
       </div>
       <div className="d-flex justify-content-end">
-        <Button
+        <button
           data-testid="book-btn"
-          variant="primary"
+          type="button"
+          class="btn btn-primary"
           onClick={handleBooking}>
           Book
-        </Button>
+        </button>
       </div>
     </>
   );
