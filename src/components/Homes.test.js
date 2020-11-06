@@ -1,4 +1,4 @@
-import { getAllByTestId, render } from '@testing-library/react';
+import { act, getAllByTestId, render } from '@testing-library/react';
 import React from 'react';
 import Homes from './Homes';
 
@@ -7,6 +7,8 @@ let container = null;
 beforeEach(async () => {
 
   container = render(<Homes/>).container;
+
+  await act(async () => {});
 
 });
 
