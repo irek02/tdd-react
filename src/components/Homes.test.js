@@ -75,3 +75,11 @@ it('should show home price', () => {
   expect(getNodeText(homePrices[0])).toBe('$1/night');
 
 });
+
+it('should show home booking button', () => {
+
+  const homeBookingBtn = getAllByTestId(container, 'home-booking-btn');
+
+  expect(homeBookingBtn[0]).toBeTruthy();
+
+});

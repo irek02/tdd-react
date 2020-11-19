@@ -24,6 +24,14 @@ export default function Homes() {
             <div data-testid="home-title" className="card-title h5">{ home.title }</div>
             <div data-testid="home-location">{ home.location }</div>
             <div data-testid="home-price">${ home.price }/night</div>
+            <div className="d-flex justify-content-end">
+              <button
+                data-testid="home-booking-btn"
+                type="button"
+                className="btn btn-primary">
+                Book
+              </button>
+            </div>
           </div>
         </div>
       </div>
