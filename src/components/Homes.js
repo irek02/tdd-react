@@ -2,6 +2,7 @@ import { Dialog, DialogContent } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import apiClient from '../services/apiClient';
 import bookingDialogService from '../services/bookingDialogService';
+import HomeBooking from './HomeBooking';
 
 export default function Homes() {
 
@@ -58,11 +59,12 @@ export default function Homes() {
         { homes }
       </div>
       <Dialog
+        maxWidth="xs"
+        fullWidth={ true }
         open={ bookingDialogState.open }
         onClose={ () => bookingDialogService.close() }>
         <DialogContent>
-          Dialog!
-          { bookingDialogState.home ? bookingDialogState.home.title : null }
+          <HomeBooking home={ bookingDialogState.home } />
         </DialogContent>
       </Dialog>
     </div>
