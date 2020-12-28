@@ -51,7 +51,7 @@ it('should calculate total', () => {
 
   // enter check-out date: 2020-12-07
   fireEvent.change(
-    getByTestId(container, 'check-in'),
+    getByTestId(container, 'check-out'),
     { target: { value: '2020-12-07' } },
   );
 
