@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import moment from "moment";
 
 export default function HomeBooking(props) {
 
@@ -8,6 +9,23 @@ export default function HomeBooking(props) {
 
   // Having access to check-in and check-out dates, how do we calculate the total price?
   // setTotalPriceState(price?)
+  useEffect(() => {
+
+    const price = props.home ? props.home.price : 0;
+    const checkInDate = moment(checkInState, 'YYYY-MM-DD');
+    const checkOutDate = moment(checkOutState, 'YYYY-MM-DD');
+    const nights = checkOutDate.diff(checkInDate, 'days');
+
+    const total = nights * price;
+
+    if (Number.isInteger(total)) {
+      setTotalPriceState(total);
+    } else {
+      setTotalPriceState('--');
+    }
+
+
+  }, [checkInState, checkOutState, props]);
 
   if (!props.home) {
     return <div data-testid="empty"></div>
