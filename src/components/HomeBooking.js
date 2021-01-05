@@ -24,7 +24,6 @@ export default function HomeBooking(props) {
       setTotalPriceState('--');
     }
 
-
   }, [checkInState, checkOutState, props]);
 
   if (!props.home) {
@@ -46,6 +45,7 @@ export default function HomeBooking(props) {
         onChange={ e => setCheckOutState(e.target.value) }
       />
       <div data-testid="total">{ totalPriceState }</div>
+      <button data-testid="book-btn">Book</button>
     </>
   );
 
