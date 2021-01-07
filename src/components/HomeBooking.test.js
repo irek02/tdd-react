@@ -1,6 +1,8 @@
-import { fireEvent, getByTestId, render } from '@testing-library/react';
+import { act, fireEvent, getByTestId, render } from '@testing-library/react';
 import React from 'react';
 import apiClient from '../services/apiClient';
+import bookingDialogService from '../services/bookingDialogService';
+import notificationService from '../services/notificationService';
 import HomeBooking from './HomeBooking';
 
 let container = null;
@@ -86,13 +88,27 @@ it('should book home after clicking the Book button', () => {
 
 });
 
-//
-//
-//
-//
-//
-//
-// should close the dialog and show notification after booking home
+it('should close the dialog and show notification after booking home', async () => {
+
+  jest.spyOn(apiClient, 'bookHome').mockImplementation(() => Promise.resolve('Mocked home booked!'));
+  jest.spyOn(bookingDialogService, 'close').mockImplementation(() => {});
+  jest.spyOn(notificationService, 'open').mockImplementation(() => {});
+
+  fireEvent.change(
+    getByTestId(container, 'check-in'),
+    { target: { value: '2020-12-04' } },
+  );
+  fireEvent.change(
+    getByTestId(container, 'check-out'),
+    { target: { value: '2020-12-07' } },
+  );
+  getByTestId(container, 'book-btn').click();
+  await act(async () => {});
+
+  expect(bookingDialogService.close).toHaveBeenCalled();
+  expect(notificationService.open).toHaveBeenCalledWith('Mocked home booked!');
+
+});
 
 it('should show empty when no home provided', () => {
 

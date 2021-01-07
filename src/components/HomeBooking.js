@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import moment from "moment";
 import apiClient from '../services/apiClient';
+import bookingDialogService from '../services/bookingDialogService';
+import notificationService from '../services/notificationService';
 
 export default function HomeBooking(props) {
 
@@ -32,7 +34,11 @@ export default function HomeBooking(props) {
   }
 
   const handleBooking = () => {
-    apiClient.bookHome(props.home, checkInState, checkOutState);
+    apiClient.bookHome(props.home, checkInState, checkOutState)
+      .then(message => {
+        bookingDialogService.close();
+        notificationService.open(message);
+      });
   }
 
   return (
