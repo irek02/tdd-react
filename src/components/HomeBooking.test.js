@@ -67,7 +67,7 @@ it('should book home after clicking the Book button', () => {
 
   // spy on apiClient
   jest.spyOn(apiClient, 'bookHome').mockImplementation(() => {
-    return Promise.resolve();
+    return Promise.resolve({ message: 'Mocked home booked!' });
   });
 
   // select dates
@@ -90,7 +90,7 @@ it('should book home after clicking the Book button', () => {
 
 it('should close the dialog and show notification after booking home', async () => {
 
-  jest.spyOn(apiClient, 'bookHome').mockImplementation(() => Promise.resolve('Mocked home booked!'));
+  jest.spyOn(apiClient, 'bookHome').mockImplementation(() => Promise.resolve({ message: 'Mocked home booked!' }));
   jest.spyOn(bookingDialogService, 'close').mockImplementation(() => {});
   jest.spyOn(notificationService, 'open').mockImplementation(() => {});
 

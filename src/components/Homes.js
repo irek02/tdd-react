@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import apiClient from '../services/apiClient';
 import bookingDialogService from '../services/bookingDialogService';
 import HomeBooking from './HomeBooking';
+import Notification from './Notification';
 
 export default function Homes() {
 
@@ -67,6 +68,7 @@ export default function Homes() {
           <HomeBooking home={ bookingDialogState.home } />
         </DialogContent>
       </Dialog>
+      <Notification/>
     </div>
   );
 }

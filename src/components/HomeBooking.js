@@ -35,9 +35,9 @@ export default function HomeBooking(props) {
 
   const handleBooking = () => {
     apiClient.bookHome(props.home, checkInState, checkOutState)
-      .then(message => {
+      .then(response => {
         bookingDialogService.close();
-        notificationService.open(message);
+        notificationService.open(response.message);
       });
   }
 
