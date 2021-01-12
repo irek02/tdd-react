@@ -28,7 +28,7 @@ it('should show title', () => {
 
 it('should show price', () => {
 
-  expect(getByTestId(container, 'price').textContent).toBe('125');
+  expect(getByTestId(container, 'price').textContent).toBe('$125 per night');
 
 });
 
@@ -59,7 +59,7 @@ it('should calculate total', () => {
   );
 
   // assert the total: 3*125=375
-  expect(getByTestId(container, 'total').textContent).toBe('375');
+  expect(getByTestId(container, 'total').textContent).toBe('Total: $375');
 
 });
 

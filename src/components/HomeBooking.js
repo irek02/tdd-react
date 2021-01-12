@@ -43,23 +43,47 @@ export default function HomeBooking(props) {
 
   return (
     <>
-      <div data-testid="title">{ props.home.title }</div>
-      <div data-testid="price">{ props.home.price }</div>
-      <input
-        data-testid="check-in"
-        type="date"
-        onChange={ e => setCheckInState(e.target.value) }
-      />
-      <input
-        data-testid="check-out"
-        type="date"
-        onChange={ e => setCheckOutState(e.target.value) }
-      />
-      <div data-testid="total">{ totalPriceState }</div>
-      <button
-        data-testid="book-btn"
-        onClick={ handleBooking }
-      >Book</button>
+      <h2 data-testid="title">{ props.home.title }</h2>
+      <div data-testid="price" className="mb-3">
+        <span className="font-weight-bold text-primary text-large">
+          ${ props.home.price }
+        </span> per night
+      </div>
+      <div className="form-group">
+        <label htmlFor="checkInDate">Choose your check-in date</label>
+        <input
+          data-testid="check-in"
+          className="form-control"
+          id="checkInDate"
+          type="date"
+          onChange={ e => setCheckInState(e.target.value) }
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="checkOutDate">Choose your check-out date</label>
+        <input
+          data-testid="check-out"
+          className="form-control"
+          id="checkOutDate"
+          type="date"
+          onChange={ e => setCheckOutState(e.target.value) }
+        />
+      </div>
+      <div data-testid="total" className="my-3 text-right">
+        <span className="font-weight-bold text-large">
+          Total: ${ totalPriceState }
+        </span>
+      </div>
+      <div className="d-flex justify-content-end">
+        <button
+          data-testid="book-btn"
+          type="button"
+          className="btn btn-primary"
+          onClick={ handleBooking }
+        >
+         Book
+        </button>
+      </div>
     </>
   );
 
