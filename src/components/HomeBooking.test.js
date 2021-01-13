@@ -63,6 +63,22 @@ it('should calculate total', () => {
 
 });
 
+it('should show "--" for invalid dates', () => {
+
+  fireEvent.change(
+    getByTestId(container, 'check-in'),
+    { target: { value: '2020-12-04' } },
+  );
+
+  fireEvent.change(
+    getByTestId(container, 'check-out'),
+    { target: { value: '2020-12-02' } },
+  );
+
+  expect(getByTestId(container, 'total').textContent).toBe('Total: $--');
+
+});
+
 it('should book home after clicking the Book button', () => {
 
   // spy on apiClient

@@ -21,7 +21,7 @@ export default function HomeBooking(props) {
 
     const total = nights * price;
 
-    if (Number.isInteger(total)) {
+    if (total > 0) {
       setTotalPriceState(total);
     } else {
       setTotalPriceState('--');
