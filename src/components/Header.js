@@ -18,22 +18,22 @@ export default function Header() {
         </div>
       </nav>
       <div className="m-0 px-4 py-2 container-fluid mw-100 border-bottom container">
-        <button data-testid="home-type" type="buttom" className="text-nowrap mr-4 py-1 btn btn-outline-secondary">
+        <button data-testid="home-type" type="button" className="text-nowrap mr-4 py-1 btn btn-outline-secondary">
           Home type
         </button>
-        <button data-testid="dates" type="buttom" className="text-nowrap mr-4 py-1 btn btn-outline-secondary">
+        <button data-testid="dates" type="button" className="text-nowrap mr-4 py-1 btn btn-outline-secondary">
           Dates
         </button>
-        <button data-testid="guests" type="buttom" className="text-nowrap mr-4 py-1 btn btn-outline-secondary">
+        <button data-testid="guests" type="button" className="text-nowrap mr-4 py-1 btn btn-outline-secondary">
           Guests
         </button>
-        <button data-testid="price" type="buttom" className="text-nowrap mr-4 py-1 btn btn-outline-secondary">
+        <button data-testid="price" type="button" className="text-nowrap mr-4 py-1 btn btn-outline-secondary">
           Price
         </button>
-        <button data-testid="rooms" type="buttom" className="text-nowrap mr-4 py-1 btn btn-outline-secondary">
+        <button data-testid="rooms" type="button" className="text-nowrap mr-4 py-1 btn btn-outline-secondary">
           Rooms
         </button>
-        <button data-testid="amenities" type="buttom" className="text-nowrap mr-4 py-1 btn btn-outline-secondary">
+        <button data-testid="amenities" type="button" className="text-nowrap mr-4 py-1 btn btn-outline-secondary">
           Amenities
         </button>
       </div>
